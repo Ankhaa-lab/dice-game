@@ -70,14 +70,15 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else {
     // 1-тэй тэнцүү бол тоглогчийн ээлжийг энэ хэсэгт сольж өгнө.
+    switchToNextPlayer();
 
     // Энэ тоглогчын ээлжиндээ цуглуусан оноог 0 болгоно:
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = 0;
+    // roundScore = 0;
+    // document.getElementById("current-" + activePlayer).textContent = 0;
 
     // Хэрэв идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг 1 болго.
     // үгүй бол идэвхтэй тоглогчийг 0 болго.
-    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+    // activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
     // if (activePlayer === 0) {
     //   activePlayer = 1;
     // } else {
@@ -89,11 +90,42 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     // document.querySelector(".player-0-panel").classList.remove("active");
     // document.querySelector(".player-1-panel").classList.add("active");
     // Дээрх кодын эсрэг үйлдэл бас биелж байх ёстой тул дараах байдлаар кодыг бичих нь хялбар болгоно.
-    document.querySelector(".player-0-panel").classList.toggle("active");
-    document.querySelector(".player-1-panel").classList.toggle("active");
+    // document.querySelector(".player-0-panel").classList.toggle("active");
+    // document.querySelector(".player-1-panel").classList.toggle("active");
 
-    // Шоо нэг буусны түр алга болгох
-    diceDom.style.display = "none";
+    // // Шоо нэг буусны түр алга болгох
+    // diceDom.style.display = "none";
+  }
+});
+
+// hold товчны eventlistner
+
+document.querySelector(".btn-hold").addEventListener("click", function () {
+  // Уг тоглогчийн цуглуулсан ээлжний оноог глобал оноон дээр нь нэмж өгнө.
+  // if(activePlayer===0){
+  // scores[0] = scores[0]+roundScore;}
+  // else{
+  //   scores[1] = scores[1]+roundScore;}
+  // }
+  //дээр кодыг дараах байдлаар бичиж болно. Учир нь scores массивын 0 элемент нь нэгдүгээр тоглогч, массивын 1 элемент нь хоёрдугаар тоглогч байна.
+  scores[activePlayer] = scores[activePlayer] + roundScore;
+  // дэлгэц дээрх оноог нь өөрчлөнө.
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+
+  // уг тоглогч хожсон эсэхийг шалгах:
+  if (scores[activePlayer] >= 20) {
+    //ялагч гэсэн текстыг нэрнийх нь оронд гаргана.
+    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+  } else {
+    // ТОглогчийн ээлжийг солино.
+    switchToNextPlayer();
   }
 });
 
@@ -102,4 +134,17 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     alert("Шоо буулаа: " + diceNumber);
   } */
 
-console.log("Шоо : " + diceNumber);
+// Энэ функц нь тоглох ээлжийг дараачийн тоглогчруу шилжүүлдэг.
+function switchToNextPlayer() {
+  // Ээлжийн оноог 0 болгоно.
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = 0;
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  // Шоо нэг буусны түр алга болгох
+  diceDom.style.display = "none";
+}
+
+// Шинэ тоглоом эхлүүлэх эвент листнер
+document.querySelector(".btn-new").addEventListener("click", function () {});
