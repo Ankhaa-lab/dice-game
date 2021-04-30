@@ -1,5 +1,5 @@
 //тоглогчийн ээлжийг хадгалах хувьсагч 1-р тоглогчийг 0, 2-р тоглогчийг 1 гэж тэмдэглэе
-var activePlayer = 1;
+var activePlayer = 0;
 
 // Тоглогчдын цуглуулсэн оног хадгалах хувьсагч
 var scores = [0, 0];
@@ -55,11 +55,46 @@ var diceDom = document.querySelector(".dice");
 diceDom.style.display = "none";
 
 document.querySelector(".btn-roll").addEventListener("click", function () {
+  // 1-6 доторх санамсаргүй нэг тоо гаргаж авна.
   var diceNumber = Math.floor(Math.random() * 6) + 1;
   //alert("Шоо буулаа + : " + diceNumber);
-  // Одоо шооын зургийг гаргая.
+  // Шооны зургийг вэб дээр гаргаж ирнэ.
   diceDom.style.display = "block";
+  // буусан санамсаргүй тоонд харгалзах шооны зургийг вэб дээр гаргаж ирнэ.
   diceDom.src = "dice-" + diceNumber + ".png";
+
+  // Буусан тоо нь 1-ээс ялгаатай бол идэвхтэй тоглогчийн ээлжийн оноог нэмэгдүүлнэ.
+  if (diceNumber !== 1) {
+    // 1-ээс ялгаатай тоо бууллаа. буусан тоог тоглогчид нэмж өгнө.
+    roundScore = roundScore + diceNumber;
+    document.getElementById("current-" + activePlayer).textContent = roundScore;
+  } else {
+    // 1-тэй тэнцүү бол тоглогчийн ээлжийг энэ хэсэгт сольж өгнө.
+
+    // Энэ тоглогчын ээлжиндээ цуглуусан оноог 0 болгоно:
+    roundScore = 0;
+    document.getElementById("current-" + activePlayer).textContent = 0;
+
+    // Хэрэв идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг 1 болго.
+    // үгүй бол идэвхтэй тоглогчийг 0 болго.
+    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+    // if (activePlayer === 0) {
+    //   activePlayer = 1;
+    // } else {
+    //   activePlayer = 0;
+    // }
+
+    // Улаан цэг шилжүүлэх код
+    // classList нь тухайн бидний хандаж буй (player-0-panel) класстай div доторх классын листыг гаргаж байгаа бөгөөд remove("active") гэдэг команд нь classlist дотроос active классыг устгаж байна. Харин add("active") нь сонгогдсон класстай div дотор active классыг нэмж өгч байна.
+    // document.querySelector(".player-0-panel").classList.remove("active");
+    // document.querySelector(".player-1-panel").classList.add("active");
+    // Дээрх кодын эсрэг үйлдэл бас биелж байх ёстой тул дараах байдлаар кодыг бичих нь хялбар болгоно.
+    document.querySelector(".player-0-panel").classList.toggle("active");
+    document.querySelector(".player-1-panel").classList.toggle("active");
+
+    // Шоо нэг буусны түр алга болгох
+    diceDom.style.display = "none";
+  }
 });
 
 /* function shooShid() {
@@ -68,13 +103,3 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
   } */
 
 console.log("Шоо : " + diceNumber);
-
-/* Шоо шиддэг товчоо ажилладаг болгоё
-Програмчлах дараалал: 
-    - Roll dice товчийг DOM -с авна.
-    - Уг товч дээр хулганаар CLICK хийхэд ажиллах эвэнт листенер функц бичиж холбоно.
-    - Клик хийхэд:
-        * 1-6 хооронд санамсаргүй тоо үүсгэнэ.
-        * DOM -с шооны зургийг обьектийг авна. 
-        * Уг обьектийг вэб дээр харагддаг болгоно.
-        * Уг обьектийн зургийг өөрчилнө. */
