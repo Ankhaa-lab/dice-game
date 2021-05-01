@@ -1,11 +1,9 @@
+// ТОглоомын бүх газар ашиглагдах глобал хувьсагчдын энд зарлаж байна.
 //тоглогчийн ээлжийг хадгалах хувьсагч 1-р тоглогчийг 0, 2-р тоглогчийг 1 гэж тэмдэглэе
 var activePlayer = 0;
-
 // Тоглогчдын цуглуулсэн оног хадгалах хувьсагч
 var scores = [0, 0];
-
 // Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
-
 var roundScore = 0;
 // Шооны аль талаараа буусныг хадгалах хувсагч хэрэгтэй. 1-6 гэсэн утгыг энэ хувьсагчид санамсаргүйгээр үүсгэж өгнө.
 var diceNumber = Math.floor(Math.random() * 6) + 1;
@@ -50,9 +48,43 @@ document.querySelector("#current-1").textContent = 0;
   document.querySelector(".dice").src = "dice-" + diceNumber + ".png";
 });
 */
+// Шооны зургийг үзүүлэх элементийг DOM -оос хайж олоод энд хадгалья
 // Одоо бид querySelector ашиглан .dice классыг олон дахин олж байдлыг дараах байдлаар хялбар болгож, программаа хурдан болгож болно.
 var diceDom = document.querySelector(".dice");
-diceDom.style.display = "none";
+
+//Тоглоомын эхлүүлнэ.
+initGame();
+
+// Шинэ тоглоом эхлүүлэх товчны функц
+function initGame() {
+  //тоглогчийн ээлжийг хадгалах хувьсагч 1-р тоглогчийг 0, 2-р тоглогчийг 1 гэж тэмдэглэе
+  activePlayer = 0;
+
+  // Тоглогчдын цуглуулсэн оног хадгалах хувьсагч
+  scores = [0, 0];
+
+  // Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
+  roundScore = 0;
+
+  //Программаа эхлэхэд бэлтгэе:
+  document.getElementById("score-0").textContent = 0;
+  document.getElementById("score-1").textContent = 0;
+  document.getElementById("current-0").textContent = 0;
+  document.getElementById("current-1").textContent = 0;
+
+  //Тоглогчдын нэрийг буцааж гаргах
+  document.getElementById("name-0").textContent = "Player 1";
+  document.getElementById("name-1").textContent = "Player 2";
+  document.querySelector(".player-0-panel").classList.remove("winner");
+  document.querySelector(".player-1-panel").classList.remove("winner");
+
+  document.querySelector(".player-0-panel").classList.remove("active");
+  document.querySelector(".player-1-panel").classList.remove("active");
+
+  document.querySelector(".player-0-panel").classList.add("active");
+
+  diceDom.style.display = "none";
+}
 
 document.querySelector(".btn-roll").addEventListener("click", function () {
   // 1-6 доторх санамсаргүй нэг тоо гаргаж авна.
@@ -147,4 +179,4 @@ function switchToNextPlayer() {
 }
 
 // Шинэ тоглоом эхлүүлэх эвент листнер
-document.querySelector(".btn-new").addEventListener("click", function () {});
+document.querySelector(".btn-new").addEventListener("click", initGame);
