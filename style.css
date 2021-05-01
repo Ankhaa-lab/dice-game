@@ -154,27 +154,17 @@ i {
   top: 467px;
 }
 
-.dice1 {
+.dice {
   /* display: none; */
   position: absolute;
   left: 50%;
-  top: 150px;
+  top: 178px;
   transform: translateX(-50%);
   height: 100px;
   box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.1);
 }
 
-.dice2 {
-  /* display: none; */
-  position: absolute;
-  left: 50%;
-  top: 260px;
-  transform: translateX(-50%);
-  height: 100px;
-  box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.1);
-}
-
-.winner {
+ы .winner {
   background-color: #f7f7f7;
 }
 .winner .player-name {
