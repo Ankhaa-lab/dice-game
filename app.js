@@ -1,4 +1,7 @@
 // ТОглоомын бүх газар ашиглагдах глобал хувьсагчдын энд зарлаж байна.
+//Тоглоом дууссан эсэхийг хадгалах төлөвийн хувьсагч
+var isNewGame;
+
 //тоглогчийн ээлжийг хадгалах хувьсагч 1-р тоглогчийг 0, 2-р тоглогчийг 1 гэж тэмдэглэе
 var activePlayer = 0;
 // Тоглогчдын цуглуулсэн оног хадгалах хувьсагч
@@ -57,6 +60,9 @@ initGame();
 
 // Шинэ тоглоом эхлүүлэх товчны функц
 function initGame() {
+  // Тоглоом эхэллээ гэдэг төлөвт оруулна.
+  isNewGame = true;
+
   //тоглогчийн ээлжийг хадгалах хувьсагч 1-р тоглогчийг 0, 2-р тоглогчийг 1 гэж тэмдэглэе
   activePlayer = 0;
 
@@ -87,77 +93,93 @@ function initGame() {
 }
 
 document.querySelector(".btn-roll").addEventListener("click", function () {
-  // 1-6 доторх санамсаргүй нэг тоо гаргаж авна.
-  var diceNumber = Math.floor(Math.random() * 6) + 1;
-  //alert("Шоо буулаа + : " + diceNumber);
-  // Шооны зургийг вэб дээр гаргаж ирнэ.
-  diceDom.style.display = "block";
-  // буусан санамсаргүй тоонд харгалзах шооны зургийг вэб дээр гаргаж ирнэ.
-  diceDom.src = "dice-" + diceNumber + ".png";
+  if (isNewGame) {
+    // 1-6 доторх санамсаргүй нэг тоо гаргаж авна.
+    var diceNumber = Math.floor(Math.random() * 6) + 1;
+    //alert("Шоо буулаа + : " + diceNumber);
+    // Шооны зургийг вэб дээр гаргаж ирнэ.
+    diceDom.style.display = "block";
+    // буусан санамсаргүй тоонд харгалзах шооны зургийг вэб дээр гаргаж ирнэ.
+    diceDom.src = "dice-" + diceNumber + ".png";
 
-  // Буусан тоо нь 1-ээс ялгаатай бол идэвхтэй тоглогчийн ээлжийн оноог нэмэгдүүлнэ.
-  if (diceNumber !== 1) {
-    // 1-ээс ялгаатай тоо бууллаа. буусан тоог тоглогчид нэмж өгнө.
-    roundScore = roundScore + diceNumber;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
+    // Буусан тоо нь 1-ээс ялгаатай бол идэвхтэй тоглогчийн ээлжийн оноог нэмэгдүүлнэ.
+    if (diceNumber !== 1) {
+      // 1-ээс ялгаатай тоо бууллаа. буусан тоог тоглогчид нэмж өгнө.
+      roundScore = roundScore + diceNumber;
+      document.getElementById(
+        "current-" + activePlayer,
+      ).textContent = roundScore;
+    } else {
+      // 1-тэй тэнцүү бол тоглогчийн ээлжийг энэ хэсэгт сольж өгнө.
+      switchToNextPlayer();
+
+      // Энэ тоглогчын ээлжиндээ цуглуусан оноог 0 болгоно:
+      // roundScore = 0;
+      // document.getElementById("current-" + activePlayer).textContent = 0;
+
+      // Хэрэв идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг 1 болго.
+      // үгүй бол идэвхтэй тоглогчийг 0 болго.
+      // activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+      // if (activePlayer === 0) {
+      //   activePlayer = 1;
+      // } else {
+      //   activePlayer = 0;
+      // }
+
+      // Улаан цэг шилжүүлэх код
+      // classList нь тухайн бидний хандаж буй (player-0-panel) класстай div доторх классын листыг гаргаж байгаа бөгөөд remove("active") гэдэг команд нь classlist дотроос active классыг устгаж байна. Харин add("active") нь сонгогдсон класстай div дотор active классыг нэмж өгч байна.
+      // document.querySelector(".player-0-panel").classList.remove("active");
+      // document.querySelector(".player-1-panel").classList.add("active");
+      // Дээрх кодын эсрэг үйлдэл бас биелж байх ёстой тул дараах байдлаар кодыг бичих нь хялбар болгоно.
+      // document.querySelector(".player-0-panel").classList.toggle("active");
+      // document.querySelector(".player-1-panel").classList.toggle("active");
+
+      // // Шоо нэг буусны түр алга болгох
+      // diceDom.style.display = "none";
+    }
   } else {
-    // 1-тэй тэнцүү бол тоглогчийн ээлжийг энэ хэсэгт сольж өгнө.
-    switchToNextPlayer();
-
-    // Энэ тоглогчын ээлжиндээ цуглуусан оноог 0 болгоно:
-    // roundScore = 0;
-    // document.getElementById("current-" + activePlayer).textContent = 0;
-
-    // Хэрэв идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг 1 болго.
-    // үгүй бол идэвхтэй тоглогчийг 0 болго.
-    // activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-    // if (activePlayer === 0) {
-    //   activePlayer = 1;
-    // } else {
-    //   activePlayer = 0;
-    // }
-
-    // Улаан цэг шилжүүлэх код
-    // classList нь тухайн бидний хандаж буй (player-0-panel) класстай div доторх классын листыг гаргаж байгаа бөгөөд remove("active") гэдэг команд нь classlist дотроос active классыг устгаж байна. Харин add("active") нь сонгогдсон класстай div дотор active классыг нэмж өгч байна.
-    // document.querySelector(".player-0-panel").classList.remove("active");
-    // document.querySelector(".player-1-panel").classList.add("active");
-    // Дээрх кодын эсрэг үйлдэл бас биелж байх ёстой тул дараах байдлаар кодыг бичих нь хялбар болгоно.
-    // document.querySelector(".player-0-panel").classList.toggle("active");
-    // document.querySelector(".player-1-panel").classList.toggle("active");
-
-    // // Шоо нэг буусны түр алга болгох
-    // diceDom.style.display = "none";
+    alert(
+      " Тоглоом дууссан байна NewGame товч дарж тоглоомыг шинээр эхлүүлнэ үү",
+    );
   }
 });
 
 // hold товчны eventlistner
 
 document.querySelector(".btn-hold").addEventListener("click", function () {
-  // Уг тоглогчийн цуглуулсан ээлжний оноог глобал оноон дээр нь нэмж өгнө.
-  // if(activePlayer===0){
-  // scores[0] = scores[0]+roundScore;}
-  // else{
-  //   scores[1] = scores[1]+roundScore;}
-  // }
-  //дээр кодыг дараах байдлаар бичиж болно. Учир нь scores массивын 0 элемент нь нэгдүгээр тоглогч, массивын 1 элемент нь хоёрдугаар тоглогч байна.
-  scores[activePlayer] = scores[activePlayer] + roundScore;
-  // дэлгэц дээрх оноог нь өөрчлөнө.
-  document.getElementById("score-" + activePlayer).textContent =
-    scores[activePlayer];
+  if (isNewGame) {
+    // Уг тоглогчийн цуглуулсан ээлжний оноог глобал оноон дээр нь нэмж өгнө.
+    // if(activePlayer===0){
+    // scores[0] = scores[0]+roundScore;}
+    // else{
+    //   scores[1] = scores[1]+roundScore;}
+    // }
+    //дээр кодыг дараах байдлаар бичиж болно. Учир нь scores массивын 0 элемент нь нэгдүгээр тоглогч, массивын 1 элемент нь хоёрдугаар тоглогч байна.
+    scores[activePlayer] = scores[activePlayer] + roundScore;
+    // дэлгэц дээрх оноог нь өөрчлөнө.
+    document.getElementById("score-" + activePlayer).textContent =
+      scores[activePlayer];
 
-  // уг тоглогч хожсон эсэхийг шалгах:
-  if (scores[activePlayer] >= 20) {
-    //ялагч гэсэн текстыг нэрнийх нь оронд гаргана.
-    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.add("winner");
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.remove("active");
+    // уг тоглогч хожсон эсэхийг шалгах:
+    if (scores[activePlayer] >= 20) {
+      // Тоглоомыг дууссан төлөвт оруулна.
+      isNewGame = false;
+      //ялагч гэсэн текстыг нэрнийх нь оронд гаргана.
+      document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.add("winner");
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.remove("active");
+    } else {
+      // ТОглогчийн ээлжийг солино.
+      switchToNextPlayer();
+    }
   } else {
-    // ТОглогчийн ээлжийг солино.
-    switchToNextPlayer();
+    alert(
+      " Тоглоом дууссан байна NewGame товч дарж тоглоомыг шинээр эхлүүлнэ үү",
+    );
   }
 });
 
